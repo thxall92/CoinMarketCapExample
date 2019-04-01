@@ -1,8 +1,8 @@
 package com.eunhye.com.coinmarketcapexample.di
 
-import org.koin.androidx.viewmodel.ext.koin.viewModel
+import com.eunhye.com.coinmarketcapexample.viewmodel.WelcomeViewModel
 import org.koin.dsl.module.applicationContext
 
 val viewModelModule = applicationContext {
-//    viewModel { WelcomeViewModel() }
+    bean { WelcomeViewModel() }
 }
