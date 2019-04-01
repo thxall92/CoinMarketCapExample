@@ -1,7 +1,8 @@
-package com.eunhye.com.coinmarketcapexample
+package com.eunhye.com.coinmarketcapexample.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.eunhye.com.coinmarketcapexample.R
 
 class MainActivity : AppCompatActivity() {
 
