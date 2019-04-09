@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="ticker"
+            type="com.eunhye.com.coinmarketcapexample.data.model.Ticker" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        app:cardCornerRadius="8dp">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@android:color/white"
+            android:paddingEnd="@dimen/main_item_horizontal_padding"
+            android:paddingStart="@dimen/main_item_horizontal_padding">
+
+            <TextView
+                    android:id="@+id/tv_currency"
+                    autoSizeText="@{true}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/main_item_cell_margin"
+                    android:lines="1"
+                    android:paddingEnd="2dp"
+                    android:paddingStart="2dp"
+                    android:text="@{ticker.currency}"
+                    android:textAllCaps="true"
+                    android:textColor="@color/gray5"
+                    android:textSize="24sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@id/tv_last"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="BTC" />
+
+            <TextView
+                    android:id="@+id/tv_last"
+                    autoSizeText="@{true}"
+                    last="@{ticker}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/main_item_cell_margin"
+                    android:gravity="end"
+                    android:lines="1"
+                    android:paddingEnd="2dp"
+                    android:paddingStart="2dp"
+                    android:textColor="@color/gray5"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/tv_volume"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintHorizontal_weight="3"
+                    app:layout_constraintStart_toEndOf="@+id/tv_currency"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="99,999,999" />
+
+            <TextView
+                    tradeAmount="@{ticker.last * ticker.volume}"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                    android:id="@+id/tv_volume"
+                    autoSizeText="@{true}"
+                    tradeAmount="@{ticker.last * ticker.volume}"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="end"
+                    android:lines="1"
+                    android:textSize="18sp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_chainStyle="spread_inside"
+                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintStart_toEndOf="@+id/tv_last"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:text="999,999백만" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.cardview.widget.CardView>
+</layout>

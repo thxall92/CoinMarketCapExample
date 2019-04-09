@@ -5,7 +5,7 @@ import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.eunhye.com.coinmarketcapexample.R
-import com.eunhye.com.coinmarketcapexample.ext.replaceFragmentInActivity
+import com.eunhye.com.coinmarketcapexample.ext.addFragment
 
 abstract class BaseFragmentBindingActivity : AppCompatActivity() {
     protected lateinit var fragment: Fragment
@@ -14,7 +14,7 @@ abstract class BaseFragmentBindingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.base_fragment_binding_activity)
         fragment = createFragment().apply {
-            replaceFragmentInActivity(this, R.id.content_frame)
+            addFragment(this)
         }
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
