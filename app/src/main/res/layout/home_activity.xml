@@ -30,7 +30,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/content_frame"
+                    app:layout_constraintBottom_toTopOf="@+id/tl_content"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -40,7 +40,7 @@
                         android:onClick="@{() -> view.onOpenSideMenuClick()}"
                         android:layout_height="36dp"
                         android:layout_marginEnd="8dp"
-                        android:background="@color/blue2" />
+                        android:src="@drawable/ic_account"/>
 
                 <TextView
                         style="@style/TitleText"
@@ -58,15 +58,30 @@
                         android:layout_marginStart="8dp"/>
             </LinearLayout>
 
-            <FrameLayout
-                    android:id="@+id/content_frame"
+            <com.google.android.material.tabs.TabLayout
+                    android:id="@+id/tl_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="24dp"
+                    android:layout_marginTop="8dp"
+                    app:tabIndicatorHeight="0dp"
+                    app:tabMode="scrollable"
+                    app:tabPadding="2dp"
+                    app:tabSelectedTextColor="@color/blue4"
+                    app:tabTextAppearance="@style/TabLayoutTextStyle"
+                    app:tabTextColor="@color/gray3"
+                    app:layout_constraintBottom_toBottomOf="@+id/vp_content"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/ll_title"/>
+
+            <androidx.viewpager.widget.ViewPager
+                    android:id="@+id/vp_content"
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_title" />
-
+                    app:layout_constraintTop_toBottomOf="@+id/tl_content" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

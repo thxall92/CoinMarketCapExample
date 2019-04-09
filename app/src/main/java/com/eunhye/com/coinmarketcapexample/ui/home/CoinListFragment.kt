@@ -17,10 +17,17 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CoinListFragment
     : BaseFragment<CoinListFragmentBinding>(R.layout.coin_list_fragment) {
 
-    val coinListViewModel by viewModel<CoinListViewModel>()
+    private val coinListViewModel by viewModel<CoinListViewModel>()
 
     companion object {
-        fun newInstance() = CoinListFragment()
+
+        const val KEY_BASE_CURRENCY = "KEY_BASE_CURRENCY"
+
+        fun newInstance(baseCurrency: String) = CoinListFragment().apply {
+            arguments = Bundle().apply {
+                putString(KEY_BASE_CURRENCY, baseCurrency)
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -34,8 +41,12 @@ class CoinListFragment
                         object : BaseViewHolder<Ticker, CoinListItemBinding>(
                             R.layout.coin_list_item, parent
                         ) {
+                            init {
+                                itemView.setOnClickListener {
+                                }
+                            }
                             override fun onViewCreated(item: Ticker?) {
-                                binding?.run {
+                                binding.run {
                                     ticker = item
                                 }
                             }
