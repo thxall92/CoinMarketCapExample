@@ -1,11 +1,18 @@
 package com.eunhye.com.coinmarketcapexample.ext
 
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
-import com.eunhye.com.coinmarketcapexample.R
+import androidx.fragment.app.FragmentManager
+import androidx.fragment.app.FragmentTransaction
 
-internal fun FragmentActivity.addFragment(fragment: Fragment) {
-    supportFragmentManager.beginTransaction()
-        .add(R.id.content_frame, fragment)
-        .commit()
+fun AppCompatActivity.replaceFragmentInActivity(fragment: Fragment, frameId: Int) {
+    supportFragmentManager.transact {
+        replace(frameId, fragment)
+    }
+}
+
+private inline fun FragmentManager.transact(action: FragmentTransaction.() -> Unit) {
+    beginTransaction().apply {
+        action()
+    }.commit()
 }

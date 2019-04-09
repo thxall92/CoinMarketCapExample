@@ -1,5 +1,6 @@
 package com.eunhye.com.coinmarketcapexample.data.source
 
+import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
 import com.eunhye.com.coinmarketcapexample.data.model.ITicker
 import com.eunhye.com.coinmarketcapexample.network.api.CoinoneApi
 import io.reactivex.Observable
@@ -12,7 +13,7 @@ class TickerRepository(val coinoneApi: CoinoneApi) : TickerDataSource {
 
     private val REQUEST_TIME_IN_MILLIS = 5000L
 
-    override fun getAllTicker(response: (market: String, tickers: Map<String, ITicker>) -> Any)
+    override fun getAllTicker(response: (exchange: Exchange, tickers: Map<String, ITicker>) -> Any)
             : Disposable =
         Observable.interval(0, REQUEST_TIME_IN_MILLIS, TimeUnit.MILLISECONDS)
             .observeOn(Schedulers.newThread())
@@ -21,7 +22,7 @@ class TickerRepository(val coinoneApi: CoinoneApi) : TickerDataSource {
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribeOn(Schedulers.newThread())
                     .subscribe {
-                            it -> response("coinone", it.toMap())
+                            it -> response(Exchange.COINONE, it.toMap())
                     }
 
             }
