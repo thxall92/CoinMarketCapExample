@@ -5,5 +5,5 @@ import com.eunhye.com.coinmarketcapexample.data.source.TickerRepository
 import org.koin.dsl.module.applicationContext
 
 val dataSourceModule = applicationContext {
-    bean { TickerRepository(get(COINONE_NETWORK)) as TickerDataSource}
+    bean { TickerRepository(get()) as TickerDataSource}
 }

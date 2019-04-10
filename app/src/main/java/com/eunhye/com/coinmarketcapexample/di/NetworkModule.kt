@@ -34,7 +34,7 @@ val networkModule = applicationContext {
         RxJava2CallAdapterFactory.create() as CallAdapter.Factory
     }
 
-    bean(COINONE_NETWORK) {
+    bean {
         Retrofit.Builder()
             .baseUrl(BuildConfig.CoinoneRestUrl)
             .client(get())

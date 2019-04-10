@@ -10,14 +10,31 @@ import java.text.DecimalFormat
 @BindingAdapter(value = ["tradeAmount"])
 fun TextView.setTradeAmount(tradeAmount: Double) {
     var amount: Long = (tradeAmount).toLong()
-    var fmtResId = if (amount < 1_000_000_000_000L) {
-        amount /= 1_000_000L
-        R.string.trade_amount_mega_fmt
-    } else {
-        amount /= 1_000_000_000L
-        R.string.trade_amount_giga_fmt
+    var fmtResId = when {
+        amount < 1_000L -> {
+            R.string.trade_amount_milli_fmt
+        }
+        amount < 1_000_000L -> {
+            R.string.trade_amount_fmt
+        }
+        amount < 1_000_000_000L -> {
+            amount /= 1_000L
+            R.string.trade_amount_kilo_fmt
+        }
+        amount < 1_000_000_000_000L -> {
+            amount /= 1_000_000L
+            R.string.trade_amount_mega_fmt
+        }
+        else -> {
+            amount /= 1_000_000_000L
+            R.string.trade_amount_giga_fmt
+        }
     }
-    text = String.format(context.getString(fmtResId), amount)
+    text = if(amount < 1_000L){
+        String.format(context.getString(fmtResId), tradeAmount)
+    }else{
+        String.format(context.getString(fmtResId), amount)
+    }
 }
 
 val doubleFormat = DecimalFormat("#,##0.00000000")
@@ -30,6 +47,7 @@ fun TextView.setLast(ticker: Ticker) {
         doubleFormat.format(ticker.last ?: 0)
     }
 }
+
 
 
 @BindingAdapter(value = ["autoSizeText"])

@@ -32,16 +32,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/main_item_cell_margin"
                     android:lines="1"
-                    android:paddingEnd="2dp"
-                    android:paddingStart="2dp"
                     android:text="@{ticker.currency}"
                     android:textAllCaps="true"
-                    android:textColor="@color/gray5"
                     android:textSize="24sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@id/tv_last"
                     app:layout_constraintHorizontal_chainStyle="spread_inside"
-                    app:layout_constraintHorizontal_weight="2"
+                    app:layout_constraintHorizontal_weight="1.5"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:text="BTC" />
@@ -53,11 +50,9 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="@dimen/main_item_cell_margin"
+                    android:layout_marginStart="@dimen/main_item_cell_margin"
                     android:gravity="end"
                     android:lines="1"
-                    android:paddingEnd="2dp"
-                    android:paddingStart="2dp"
-                    android:textColor="@color/gray5"
                     android:textSize="18sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/tv_volume"
@@ -68,19 +63,9 @@
                     tools:text="99,999,999" />
 
             <TextView
-                    tradeAmount="@{ticker.last * ticker.volume}"
-                    android:layout_width="80dp"
-                    android:layout_height="wrap_content"
-                    android:gravity="end"
-                    android:textSize="18sp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
                     android:id="@+id/tv_volume"
                     autoSizeText="@{true}"
-                    tradeAmount="@{ticker.last * ticker.volume}"
+                    tradeAmount="@{ticker.volume}"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:gravity="end"

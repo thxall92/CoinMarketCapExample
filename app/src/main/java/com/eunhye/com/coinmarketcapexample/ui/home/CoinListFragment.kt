@@ -33,8 +33,7 @@ class CoinListFragment
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.run {
-            setLifecycleOwner(this@CoinListFragment)
-            this.coinListVM = this@CoinListFragment.coinListViewModel
+            coinListVM = coinListViewModel
             rvContent.run {
                 adapter = object : BaseRecyclerViewAdapter<Ticker>() {
                     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =

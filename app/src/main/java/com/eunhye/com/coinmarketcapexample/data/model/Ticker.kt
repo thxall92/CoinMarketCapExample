@@ -1,8 +1,13 @@
 package com.eunhye.com.coinmarketcapexample.data.model
 
-data class Ticker(val currency: String,
-                  val last: Double,
-                  val high: Double,
-                  val low: Double,
-                  val first: Double,
-                  val volume: Double)
+data class Ticker(
+    var currency: String? = "",
+    var baseCurrency: String? = "",
+    var last: Double?,
+    var high: Double?,
+    var low: Double?,
+    var volume: Double?,
+    var diff: Double? = null
+) : ITicker {
+    override fun toTicker() = this
+}

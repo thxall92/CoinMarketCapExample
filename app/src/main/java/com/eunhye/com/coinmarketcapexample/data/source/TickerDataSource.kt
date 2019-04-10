@@ -1,9 +1,10 @@
 package com.eunhye.com.coinmarketcapexample.data.source
 
-import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
-import com.eunhye.com.coinmarketcapexample.data.model.ITicker
+import com.eunhye.com.coinmarketcapexample.data.model.Ticker
 import io.reactivex.disposables.Disposable
 
 interface TickerDataSource {
-    fun getAllTicker(response: (exchange: Exchange, tickers: Map<String, ITicker>) -> (Any)): Disposable
+    fun getAllTicker(baseCurrency: String?,
+                     success: (tickers: List<Ticker>) -> Unit,
+                     failed: (errorCode: String) -> Unit): Disposable
 }
