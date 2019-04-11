@@ -1,6 +1,7 @@
 package com.eunhye.com.coinmarketcapexample.data.source
 
 import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
+import com.eunhye.com.coinmarketcapexample.data.source.ticker.TickerDataSource
 
 interface MainExchangeDataSource {
 
@@ -9,5 +10,4 @@ interface MainExchangeDataSource {
     fun getSelectedExchange(): Exchange?
 
     fun getTickerDataSource(): TickerDataSource
-
 }

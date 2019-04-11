@@ -5,6 +5,6 @@ import retrofit2.http.GET
 
 interface CoinoneApi {
 
-    @GET(value = "ticker/?currency=all")
-    fun allTicker(): Single<Map<String, Any>>
+    @GET("ticker/?currency=all")
+    fun getAllTicker(): Single<Map<String, Any>>
 }

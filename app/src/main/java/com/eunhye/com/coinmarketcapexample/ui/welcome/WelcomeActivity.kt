@@ -24,12 +24,12 @@ class WelcomeActivity
                 nextActivity = {
                     (vpContent.adapter as? WelcomeAdapter)?.run{
                         liveCurrentPagePosition.value?.let{
-                            if ((getItem(it) as HomeActivity).saveMainExchange()) {
-                                startActivity(Intent(applicationContext, HomeActivity::class.java))
-                                finish()
-                            }else {
-                                Toast.makeText(applicationContext, getString(R.string.please_select_main_exchange), Toast.LENGTH_LONG).show()
-                            }
+//                            if ((getItem(it) as HomeActivity).saveMainExchange()) {
+//                                startActivity(Intent(applicationContext, HomeActivity::class.java))
+//                                finish()
+//                            }else {
+//                                Toast.makeText(applicationContext, getString(R.string.please_select_main_exchange), Toast.LENGTH_LONG).show()
+//                            }
                         }
                     }
 
@@ -42,4 +42,6 @@ class WelcomeActivity
             }
         }
     }
+
+
 }

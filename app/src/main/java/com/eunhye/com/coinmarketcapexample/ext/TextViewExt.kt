@@ -4,7 +4,6 @@ import android.widget.TextView
 import androidx.core.widget.TextViewCompat
 import androidx.databinding.BindingAdapter
 import com.eunhye.com.coinmarketcapexample.R
-import com.eunhye.com.coinmarketcapexample.data.model.Ticker
 import java.text.DecimalFormat
 
 @BindingAdapter(value = ["tradeAmount"])
@@ -37,18 +36,11 @@ fun TextView.setTradeAmount(tradeAmount: Double) {
     }
 }
 
-val doubleFormat = DecimalFormat("#,##0.00000000")
-val intFormat = DecimalFormat("#,###.##")
+val doubleFormat = DecimalFormat("#,###.######")
 @BindingAdapter(value = ["last"])
-fun TextView.setLast(ticker: Ticker) {
-    text = if (ticker.last ?: .0 > 1) {
-        intFormat.format(ticker.last ?: 0)
-    } else {
-        doubleFormat.format(ticker.last ?: 0)
-    }
+fun TextView.setLast(last: Double) {
+    text = doubleFormat.format(last)
 }
-
-
 
 @BindingAdapter(value = ["autoSizeText"])
 fun TextView.setAutoSizeText(autoSizeText: Boolean){
