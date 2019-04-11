@@ -4,17 +4,15 @@ import com.eunhye.com.coinmarketcapexample.BuildConfig
 import com.eunhye.com.coinmarketcapexample.network.api.CoinoneApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import org.koin.dsl.module.applicationContext
+import org.koin.dsl.module.module
 import retrofit2.CallAdapter
 import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 
-const val COINONE_NETWORK = "COINONE_NETWORK"
-
-val networkModule = applicationContext {
-    bean {
+val networkModule = module {
+    single {
         OkHttpClient.Builder()
             .addInterceptor(HttpLoggingInterceptor().apply {
                 level = if (BuildConfig.DEBUG) {
@@ -26,15 +24,15 @@ val networkModule = applicationContext {
             .build()
     }
 
-    bean {
+    single {
         GsonConverterFactory.create() as Converter.Factory
     }
 
-    bean {
+    single {
         RxJava2CallAdapterFactory.create() as CallAdapter.Factory
     }
 
-    bean {
+    single {
         Retrofit.Builder()
             .baseUrl(BuildConfig.CoinoneRestUrl)
             .client(get())

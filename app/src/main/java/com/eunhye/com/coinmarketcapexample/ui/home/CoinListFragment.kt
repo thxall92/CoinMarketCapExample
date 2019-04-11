@@ -7,7 +7,6 @@ import com.eunhye.com.coinmarketcapexample.R
 import com.eunhye.com.coinmarketcapexample.base.BaseFragment
 import com.eunhye.com.coinmarketcapexample.base.BaseRecyclerViewAdapter
 import com.eunhye.com.coinmarketcapexample.base.BaseViewHolder
-import com.eunhye.com.coinmarketcapexample.data.model.ITicker
 import com.eunhye.com.coinmarketcapexample.data.model.Ticker
 import com.eunhye.com.coinmarketcapexample.databinding.CoinListFragmentBinding
 import com.eunhye.com.coinmarketcapexample.databinding.CoinListItemBinding
