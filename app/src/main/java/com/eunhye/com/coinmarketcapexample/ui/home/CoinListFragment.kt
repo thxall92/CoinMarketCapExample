@@ -3,6 +3,7 @@ package com.eunhye.com.coinmarketcapexample.ui.home
 import android.os.Bundle
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.library.baseAdapters.BR
 import com.eunhye.com.coinmarketcapexample.R
 import com.eunhye.com.coinmarketcapexample.base.BaseFragment
 import com.eunhye.com.coinmarketcapexample.base.BaseRecyclerViewAdapter
@@ -16,11 +17,11 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class CoinListFragment
     : BaseFragment<CoinListFragmentBinding>(R.layout.coin_list_fragment) {
 
+    private val KEY_BASE_CURRENCY = "KEY_BASE_CURRENCY"
+
     private val coinListViewModel by viewModel<CoinListViewModel>()
 
     companion object {
-
-        const val KEY_BASE_CURRENCY = "KEY_BASE_CURRENCY"
 
         fun newInstance(baseCurrency: String) = CoinListFragment().apply {
             arguments = Bundle().apply {
@@ -31,29 +32,24 @@ class CoinListFragment
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        coinListViewModel.baseCurrency = arguments?.getString(KEY_BASE_CURRENCY)
         binding.run {
             coinListVM = coinListViewModel
             rvContent.run {
-                adapter = object : BaseRecyclerViewAdapter<Ticker>() {
-                    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
-                        object : BaseViewHolder<Ticker, CoinListItemBinding>(
-                            R.layout.coin_list_item, parent
-                        ) {
-                            init {
-                                itemView.setOnClickListener {
-                                }
-                            }
-                            override fun onViewCreated(item: Ticker?) {
-                                binding.run {
-                                    ticker = item
-                                }
+                adapter = object : BaseRecyclerViewAdapter<Ticker, CoinListItemBinding>(
+                    layoutRes = R.layout.coin_list_item,
+                    bindingVariableId = BR.ticker
+                ) {
+                    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<CoinListItemBinding> {
+                        return super.onCreateViewHolder(parent, viewType).apply {
+                            itemView.setOnClickListener {
+
                             }
                         }
+                    }
                 }
             }
         }
-        compositeDisposable.add(coinListViewModel.getAllTickers())
-
     }
 
     override fun onResume() {
@@ -63,6 +59,7 @@ class CoinListFragment
 
     override fun onPause() {
         compositeDisposable.clear()
+        coinListViewModel.finish()
         super.onPause()
     }
 }

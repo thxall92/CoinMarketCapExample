@@ -2,6 +2,8 @@ package com.eunhye.com.coinmarketcapexample.di
 
 import com.eunhye.com.coinmarketcapexample.BuildConfig
 import com.eunhye.com.coinmarketcapexample.network.api.CoinoneApi
+import com.eunhye.com.coinmarketcapexample.network.api.GopaxApi
+import com.eunhye.com.coinmarketcapexample.network.api.UpbitApi
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.dsl.module.module
@@ -39,6 +41,24 @@ val networkModule = module {
             .addCallAdapterFactory(get())
             .addConverterFactory(get())
             .build()
-            .create(CoinoneApi::class.java) as CoinoneApi
+            .create(CoinoneApi::class.java)
+    }
+    single {
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.UpbitRestUrl)
+            .client(get())
+            .addCallAdapterFactory(get())
+            .addConverterFactory(get())
+            .build()
+            .create(UpbitApi::class.java)
+    }
+    single {
+        Retrofit.Builder()
+            .baseUrl(BuildConfig.GopaxRestUrl)
+            .client(get())
+            .addCallAdapterFactory(get())
+            .addConverterFactory(get())
+            .build()
+            .create(GopaxApi::class.java)
     }
 }

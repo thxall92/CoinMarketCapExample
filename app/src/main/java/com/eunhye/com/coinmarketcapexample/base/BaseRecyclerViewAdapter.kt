@@ -1,20 +1,18 @@
 package com.eunhye.com.coinmarketcapexample.base
 
+import android.view.ViewGroup
+import androidx.annotation.LayoutRes
+import androidx.databinding.ViewDataBinding
 import androidx.recyclerview.widget.RecyclerView
+import com.eunhye.com.coinmarketcapexample.ext.logE
 import io.reactivex.subjects.PublishSubject
 
-abstract class BaseRecyclerViewAdapter<ITEM : Any>
-    : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+abstract class BaseRecyclerViewAdapter<ITEM : Any, B : ViewDataBinding>(
+    @LayoutRes private val layoutRes: Int,
+    private val bindingVariableId: Int? = null
+) : RecyclerView.Adapter<BaseViewHolder<B>>() {
 
-    protected var items = mutableListOf<ITEM>()
-
-    val itemClickEvent: PublishSubject<Int> = PublishSubject.create()
-
-    fun add(item: ITEM?) {
-        item?.let {
-            items.add(it)
-        }
-    }
+    private val items = mutableListOf<ITEM>()
 
     fun replaceAll(items: List<ITEM>?) {
         items?.let {
@@ -25,20 +23,15 @@ abstract class BaseRecyclerViewAdapter<ITEM : Any>
         }
     }
 
-    fun clear() {
-        items.clear()
-    }
-
-    fun getItem(position: Int) = items[position]
-
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+        object : BaseViewHolder<B>(
+            layoutRes = layoutRes,
+            parent = parent,
+            bindingVariableId = bindingVariableId) {}
 
     override fun getItemCount(): Int = items.size
 
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        (holder as? BaseViewHolder<*, *>)?.onBindViewHolder(items[position])
-    }
-
-    override fun getItemId(position: Int): Long {
-        return items[position].hashCode().toLong()
+    override fun onBindViewHolder(holder: BaseViewHolder<B>, position: Int) {
+        holder.onBindViewHolder(items[position])
     }
 }

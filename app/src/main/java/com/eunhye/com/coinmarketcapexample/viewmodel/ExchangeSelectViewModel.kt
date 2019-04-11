@@ -1,7 +1,6 @@
 package com.eunhye.com.coinmarketcapexample.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import com.eunhye.com.coinmarketcapexample.base.BaseViewModel
 import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
@@ -15,30 +14,30 @@ class ExchangeSelectViewModel(
 
     val liveExchanges = MutableLiveData<List<String>>()
 
-    var selectedItemPosition = -1
+    var selectedItemPosition = 0
 
     init {
         val exchanges = Exchange.values()
-
         liveExchanges.value = (exchanges.toList().map {
             application.getString(it.nameRes)
         }.sortedBy { it })
+
+        saveMainExchange()
+
         mainExchangeDataSource.getSelectedExchange()?.let {
             selectedItemPosition = liveExchanges.value!!.indexOf(application.getString(it.nameRes))
         }
     }
 
     fun saveMainExchange(): Boolean {
-        if(selectedItemPosition == -1) return false
+        if (selectedItemPosition == -1) return false
 
-        mainExchangeDataSource.saveMainExchange(
-            getExchange(liveExchanges.value!![selectedItemPosition], application)!!
-        )
+        mainExchangeDataSource.saveMainExchange(getExchange(liveExchanges.value!![selectedItemPosition], application)!!)
         return true
     }
-
 
     fun getBaseCurrencies() = mainExchangeDataSource.getSelectedExchange()?.baseCurrencies!!
 
     fun getSelectedExchange() = mainExchangeDataSource.getSelectedExchange()!!
+
 }

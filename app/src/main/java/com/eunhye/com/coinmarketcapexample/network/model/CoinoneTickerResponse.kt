@@ -1,5 +1,6 @@
 package com.eunhye.com.coinmarketcapexample.network.model
 
+import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
 import com.eunhye.com.coinmarketcapexample.data.model.ITicker
 import com.eunhye.com.coinmarketcapexample.data.model.Ticker
 import com.google.gson.annotations.SerializedName
@@ -23,14 +24,14 @@ data class CoinoneTicker(
 ) : ITicker {
     override fun toTicker(): Ticker {
         val diff = (last - first) / first * 100
-        return Ticker(
-            currency = currency ?: "",
+        return Ticker(currency = currency ?: "",
             baseCurrency = "KRW",
             last = last,
             high = high,
             low = low,
             diff = diff,
-            volume = volume * last
-        )
+            volume = volume * last)
     }
+
+    override fun toExchangeTicker(exchange: String) = ExchangeTicker(Exchange.COINONE.exchangeName, toTicker())
 }
