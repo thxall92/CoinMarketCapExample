@@ -2,9 +2,9 @@ package com.eunhye.com.coinmarketcapexample.util
 
 import android.app.Application
 import android.preference.PreferenceManager
+import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
+import com.eunhye.com.coinmarketcapexample.ext.fromJson
 import com.google.gson.Gson
-import okhttp3.internal.connection.Exchange
-
 
 class PrefUtils(application: Application) {
 
@@ -17,4 +17,9 @@ class PrefUtils(application: Application) {
     val gson = Gson()
 
     fun getEditor() = sharedPref.edit()
+
+    fun getExchange(): Exchange? {
+        val jsonString = sharedPref.getString(PREF_KEY_EXCHANGE, null) ?: return null
+        return gson.fromJson<Exchange>(jsonString)
+    }
 }

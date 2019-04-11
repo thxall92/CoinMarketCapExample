@@ -2,26 +2,38 @@ package com.eunhye.com.coinmarketcapexample.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
+import androidx.databinding.library.baseAdapters.BR
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentStatePagerAdapter
-import com.eunhye.com.coinmarketcapexample.R
+import androidx.recyclerview.widget.RecyclerView
 import com.eunhye.com.coinmarketcapexample.base.BaseActivity
 import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
 import com.eunhye.com.coinmarketcapexample.databinding.HomeActivityBinding
+import com.eunhye.com.coinmarketcapexample.R
+import com.eunhye.com.coinmarketcapexample.base.BaseRecyclerViewAdapter
+import com.eunhye.com.coinmarketcapexample.base.BaseViewHolder
+import com.eunhye.com.coinmarketcapexample.databinding.ExchangeSelectItemBinding
+import com.eunhye.com.coinmarketcapexample.viewmodel.ExchangeSelectViewModel
+import com.sothree.slidinguppanel.SlidingUpPanelLayout
+import org.koin.androidx.viewmodel.ext.android.viewModel
+
 
 class HomeActivity :
     BaseActivity<HomeActivityBinding>(R.layout.home_activity) {
 
-    private val exitToast by lazy { Toast.makeText(applicationContext, R.string.description_back_finish, Toast.LENGTH_LONG) }
+    private val exchangeSelectViewModel by viewModel<ExchangeSelectViewModel>()
+
+    private var exitTime = 0L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 //        replaceFragmentInActivity(coinListFragment, R.id.fl_side_left)
         binding.run {
             view = this@HomeActivity
+            exchangeSelectVM = exchangeSelectViewModel
             dlRoot.run {
                 setScrimColor(Color.TRANSPARENT)
                 addDrawerListener(object : DrawerLayout.DrawerListener {
@@ -37,6 +49,32 @@ class HomeActivity :
                     override fun onDrawerOpened(drawerView: View) {
                     }
                 })
+            }
+
+            suplRoot.addPanelSlideListener(object : SlidingUpPanelLayout.PanelSlideListener {
+                override fun onPanelSlide(panel: View?, slideOffset: Float) {
+                    icArrowForward.rotation = slideOffset * 180
+                }
+
+                override fun onPanelStateChanged(panel: View?, previousState: SlidingUpPanelLayout.PanelState?, newState: SlidingUpPanelLayout.PanelState?) {
+
+                }
+            })
+            
+            rvExchangeList.adapter = object : BaseRecyclerViewAdapter<String>(){
+                override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
+                        object : BaseViewHolder<String, ExchangeSelectItemBinding>(
+                            R.layout.exchange_select_item,
+                            parent
+                        ){
+                            override fun onViewCreated(item: String?) {
+                                binding.run{
+                                    exchange = item
+                                    selectedPosition = exchangeSelectViewModel.selectedItemPosition
+                                    itemPosition = adapterPosition
+                                }
+                            }
+                        }
             }
 
             tlContent.setupWithViewPager(vpContent)
@@ -61,14 +99,20 @@ class HomeActivity :
 
 
     override fun onBackPressed() {
+        if (binding.suplRoot.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            binding.suplRoot.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+            return
+        }
+
         if (binding.dlRoot.isDrawerOpen(binding.flSideLeft)) {
             binding.dlRoot.closeDrawer(binding.flSideLeft)
             return
         }
-        if (exitToast.view.windowVisibility == View.VISIBLE) {
-            super.onBackPressed()
+        if (System.currentTimeMillis() - exitTime > 2000) {
+            Toast.makeText(applicationContext, R.string.description_back_finish, Toast.LENGTH_SHORT).show()
+            exitTime = System.currentTimeMillis()
         } else {
-            exitToast.show()
+            super.onBackPressed()
         }
     }
 
@@ -76,9 +120,18 @@ class HomeActivity :
         binding.dlRoot.openDrawer(binding.flSideLeft)
     }
 
+    fun onOpenExchangeListClick() {
+        binding.suplRoot.panelState = if (binding.suplRoot.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
+            SlidingUpPanelLayout.PanelState.COLLAPSED
+        } else {
+            SlidingUpPanelLayout.PanelState.EXPANDED
+        }
+    }
+
     fun refreshPage() {
         val pageTitles = Exchange.COINONE.baseCurrencies
         binding.run {
+            tvExchange.text = getString(Exchange.COINONE.nameRes)
             vpContent.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
                 override fun getItem(position: Int) = CoinListFragment.newInstance(pageTitles[position])
                 override fun getCount() = pageTitles.size

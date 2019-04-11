@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
-        <import type="android.view.View" />
+        <import type="android.view.View"/>
 
         <variable
             name="view"
-            type="com.eunhye.com.coinmarketcapexample.ui.home.HomeActivity" />
+            type="com.eunhye.com.coinmarketcapexample.ui.home.HomeActivity"/>
+
+        <variable
+            name="exchangeSelectVM"
+            type="com.eunhye.com.coinmarketcapexample.viewmodel.ExchangeSelectViewModel"/>
 
     </data>
 
@@ -18,11 +22,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
                 android:id="@+id/cl_root"
                 style="@style/RootTopViewGroup"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
             <LinearLayout
                     android:id="@+id/ll_title"
@@ -30,7 +35,7 @@
                     android:layout_height="?attr/actionBarSize"
                     android:gravity="center_vertical"
                     android:orientation="horizontal"
-                    app:layout_constraintBottom_toTopOf="@+id/tl_content"
+                    app:layout_constraintBottom_toTopOf="@+id/supl_root"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -42,15 +47,31 @@
                         android:layout_marginEnd="8dp"
                         android:src="@drawable/ic_account"/>
 
-                <TextView
-                        style="@style/TitleText"
+
+                <LinearLayout
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="8dp"
-                        android:layout_marginStart="8dp"
+                        android:layout_height="match_parent"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:text="@string/app_name" />
+                        android:gravity="center_vertical"
+                        android:onClick="@{() -> view.onOpenExchangeListClick()}"
+                        android:orientation="horizontal">
+
+                    <TextView
+                            android:id="@+id/tv_exchange"
+                            style="@style/TitleText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginStart="8dp"
+                            tools:text="@string/app_name"/>
+
+                    <ImageView
+                            android:id="@+id/ic_arrow_forward"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/ic_keyboard_arrow_down"/>
+
+                </LinearLayout>
 
                 <ImageView
                         android:layout_width="36dp"
@@ -58,32 +79,73 @@
                         android:layout_marginStart="8dp"/>
             </LinearLayout>
 
-            <com.google.android.material.tabs.TabLayout
-                    android:id="@+id/tl_content"
+            <com.sothree.slidinguppanel.SlidingUpPanelLayout
+                    android:id="@+id/supl_root"
                     android:layout_width="match_parent"
-                    android:layout_height="24dp"
-                    android:layout_marginTop="8dp"
-                    app:tabIndicatorHeight="0dp"
-                    app:tabMode="scrollable"
-                    app:tabPadding="2dp"
-                    app:tabSelectedTextColor="@color/blue4"
-                    app:tabTextAppearance="@style/TabLayoutTextStyle"
-                    app:tabTextColor="@color/gray3"
-                    app:layout_constraintBottom_toBottomOf="@+id/vp_content"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/ll_title"/>
+                    android:layout_height="match_parent"
+                    android:gravity="top"
+                    app:umanoInitialState="hidden"
+                    app:umanoOverlay="true"
+                    app:umanoPanelHeight="0dp"
+                    app:umanoScrollableView="@id/rv_exchange_list"
+                    app:umanoShadowHeight="0dp">
 
-            <androidx.viewpager.widget.ViewPager
-                    android:id="@+id/vp_content"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/tl_content" />
+                <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginEnd="12dp"
+                        android:layout_marginStart="12dp"
+                        android:orientation="vertical">
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                    <com.google.android.material.tabs.TabLayout
+                            android:id="@+id/tl_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="24dp"
+                            android:layout_marginTop="8dp"
+                            app:tabIndicatorHeight="0dp"
+                            app:tabMode="scrollable"
+                            app:tabPadding="2dp"
+                            app:tabSelectedTextColor="@color/blue4"
+                            app:tabTextAppearance="@style/TabLayoutTextStyle"
+                            app:tabTextColor="@color/gray3"/>
+
+                    <androidx.viewpager.widget.ViewPager
+                            android:id="@+id/vp_content"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+                </LinearLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rv_exchange_list"
+                            replaceAll="@{exchangeSelectVM.liveExchanges}"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:background="@drawable/bg_bottom_round"
+                            android:clipToPadding="false"
+                            android:paddingBottom="2dp"
+                            android:paddingEnd="@dimen/main_item_horizontal_padding"
+                            android:paddingStart="@dimen/main_item_horizontal_padding"
+                            android:paddingTop="2dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+                    <Space
+                            android:id="@+id/space"
+                            android:layout_width="0dp"
+                            android:layout_height="100dp"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"/>
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.sothree.slidinguppanel.SlidingUpPanelLayout>
+
+        </LinearLayout>
 
         <FrameLayout
                 android:id="@+id/fl_side_left"
@@ -91,7 +153,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="start"
                 android:layout_marginStart="-65dp"
-                android:background="@color/white" />
+                android:background="@color/white"/>
 
     </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
