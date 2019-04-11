@@ -2,6 +2,7 @@ package com.eunhye.com.coinmarketcapexample.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
@@ -10,11 +11,11 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.eunhye.com.coinmarketcapexample.base.BaseActivity
-import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
 import com.eunhye.com.coinmarketcapexample.databinding.HomeActivityBinding
 import com.eunhye.com.coinmarketcapexample.R
 import com.eunhye.com.coinmarketcapexample.base.BaseRecyclerViewAdapter
 import com.eunhye.com.coinmarketcapexample.base.BaseViewHolder
+import com.eunhye.com.coinmarketcapexample.data.enums.Exchange
 import com.eunhye.com.coinmarketcapexample.databinding.ExchangeSelectItemBinding
 import com.eunhye.com.coinmarketcapexample.viewmodel.ExchangeSelectViewModel
 import com.sothree.slidinguppanel.SlidingUpPanelLayout
@@ -60,13 +61,25 @@ class HomeActivity :
 
                 }
             })
-            
+
             rvExchangeList.adapter = object : BaseRecyclerViewAdapter<String>(){
                 override fun onCreateViewHolder(parent: ViewGroup, viewType: Int) =
                         object : BaseViewHolder<String, ExchangeSelectItemBinding>(
                             R.layout.exchange_select_item,
                             parent
                         ){
+
+                            init {
+                                itemView.setOnClickListener{
+                                    if(exchangeSelectViewModel.selectedItemPosition != adapterPosition){
+                                        exchangeSelectViewModel.selectedItemPosition = adapterPosition
+                                        exchangeSelectViewModel.saveMainExchange()
+                                        notifyDataSetChanged()
+                                        refreshPage()
+                                    }
+                                }
+                            }
+
                             override fun onViewCreated(item: String?) {
                                 binding.run{
                                     exchange = item
@@ -92,11 +105,12 @@ class HomeActivity :
                 }
             }
         }
-
-
         refreshPage()
     }
 
+    fun saveMainExchange(): Boolean {
+        return exchangeSelectViewModel.saveMainExchange()
+    }
 
     override fun onBackPressed() {
         if (binding.suplRoot.panelState == SlidingUpPanelLayout.PanelState.EXPANDED) {
@@ -129,12 +143,16 @@ class HomeActivity :
     }
 
     fun refreshPage() {
-        val pageTitles = Exchange.COINONE.baseCurrencies
         binding.run {
-            tvExchange.text = getString(Exchange.COINONE.nameRes)
+            suplRoot.panelState = SlidingUpPanelLayout.PanelState.COLLAPSED
+            tvExchange.text = getString(exchangeSelectViewModel.getSelectedExchange().nameRes)
+            val pageTitles = exchangeSelectViewModel.getBaseCurrencies()
+
             vpContent.adapter = object : FragmentStatePagerAdapter(supportFragmentManager) {
                 override fun getItem(position: Int) = CoinListFragment.newInstance(pageTitles[position])
+
                 override fun getCount() = pageTitles.size
+
                 override fun getPageTitle(position: Int) = pageTitles[position]
             }
         }

@@ -9,5 +9,5 @@ import org.koin.dsl.module.module
 val viewModelModule = module {
     single { WelcomeViewModel() }
     single { CoinListViewModel(get()) }
-    single { ExchangeSelectViewModel(androidApplication())}
+    single { ExchangeSelectViewModel(androidApplication(), get())}
 }
