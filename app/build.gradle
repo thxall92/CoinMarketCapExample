@@ -82,6 +82,9 @@ dependencies {
     // CircleImageView
     implementation "de.hdodenhof:circleimageview:$circleImageviewVersion"
 
+    // Slide Up Pannel
+    implementation "com.sothree.slidinguppanel:library:$slideUpPannelVersion"
+
     // Anko
     implementation "org.jetbrains.anko:anko-commons:$ankoVersion"
 }

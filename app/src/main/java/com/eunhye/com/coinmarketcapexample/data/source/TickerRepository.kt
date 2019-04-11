@@ -46,9 +46,7 @@ class TickerRepository(val coinoneApi: CoinoneApi) : TickerDataSource {
                     }
                     .subscribe ({
                         success.invoke(it)
-                    }){
-
-                    }
+                    }){}
 
             }
 

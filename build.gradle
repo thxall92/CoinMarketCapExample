@@ -27,6 +27,8 @@ buildscript {
         pagerIndicatorVersion = '1.0.3'
         circleImageviewVersion = '3.0.0'
 
+        slideUpPannelVersion = '3.4.0'
+
         ankoVersion = '0.10.8'
     }
     repositories {
